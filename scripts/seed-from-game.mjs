@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 const game = process.argv[2] || path.resolve('../gate-hero');
-const tables = ['classes', 'skills', 'monsters', 'dungeon', 'economy', 'skilltrees', 'skillbranch', 'shards', 'advancements', 'missions', 'cosmetics', 'combat'];
+const tables = ['classes', 'skills', 'monsters', 'dungeon', 'economy', 'skilltrees', 'skillbranch', 'shards', 'advancements', 'missions', 'cosmetics', 'combat', 'content'];
 const out = {};
 for (const t of tables) out[t] = JSON.parse(readFileSync(path.join(game, 'shared/data', t + '.json'), 'utf8'));
 writeFileSync('apps/web/src/demo/seed.json', JSON.stringify(out));

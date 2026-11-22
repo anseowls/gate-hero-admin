@@ -7,7 +7,7 @@ import { TABLES, TABLE_NAMES, tableDef, getPath } from './tables.ts';
 import { diff, validateEntry, show } from './diff.ts';
 
 /** 게임 서버 gamedata.ts BALANCE_TABLES 순서 — 릴리스 해시가 게임 쪽과 같아지려면 이 순서로 직렬화해야 한다 */
-export const RELEASE_ORDER = ['classes', 'skills', 'monsters', 'dungeon', 'economy', 'skilltrees', 'skillbranch', 'shards', 'advancements', 'missions', 'cosmetics', 'combat'];
+export const RELEASE_ORDER = ['classes', 'skills', 'monsters', 'dungeon', 'economy', 'skilltrees', 'skillbranch', 'shards', 'advancements', 'missions', 'cosmetics', 'combat', 'content'];
 
 export interface Store {
   tx<T>(fn: () => T): T;

@@ -16,7 +16,8 @@ export const TABLES: TableDef[] = [
   { name: 'shards', label: '게이트 파편', desc: '판 중에 고르는 강화 효과', title: ['name'], summary: [['등급', 'rarity']] },
   { name: 'missions', label: '미션', desc: '일간 · 주간 목표와 보상', title: [], summary: [] },
   { name: 'cosmetics', label: '꾸미기', desc: '재화 · 가격 · 상품', title: [], summary: [] },
-  { name: 'combat', label: '전투 감각', desc: '받아치기 판정 · 반격 · 필살기 게이지 · 이동', title: [], summary: [] }
+  { name: 'combat', label: '전투 감각', desc: '받아치기 판정 · 반격 · 필살기 게이지 · 이동', title: [], summary: [] },
+  { name: 'content', label: '콘텐츠', desc: '요일 던전 · 무한 균열 · 레이드 · 세트 · 변이 · 이벤트 · 업적 · 칭호 · 도감 · 출석 · 시즌 패스', title: [], summary: [] }
 ];
 export const TABLE_NAMES = TABLES.map(t => t.name);
 export const tableDef = (n: string) => TABLES.find(t => t.name === n);
