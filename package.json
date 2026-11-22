@@ -1,0 +1,15 @@
+{
+  "name": "gate-hero-admin",
+  "private": true,
+  "description": "게이트히어로 운영툴 — 관리 API(apps/api) + 관리 화면(apps/web, React·TypeScript, PC·모바일)",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev:api": "npm -w apps/api run dev",
+    "dev:web": "npm -w apps/web run dev",
+    "build": "npm -w apps/web run build",
+    "build:demo": "npm -w apps/web run build:demo",
+    "test": "npm -w apps/api test",
+    "typecheck": "tsc -p packages/shared && tsc -p apps/api && tsc -p apps/web",
+    "seed": "node scripts/seed-from-game.mjs"
+  }
+}

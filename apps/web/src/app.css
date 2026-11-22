@@ -1,0 +1,7 @@
+/* 모바일: 아래 탭 바만큼 본문 아래 여백 */
+@media (max-width: 48em) { .gha-main { padding-bottom: 84px !important; } }
+.gha-changed { box-shadow: 0 0 0 2px var(--mantine-color-yellow-6); border-radius: 6px; }
+.gha-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+.gha-row:hover { background: var(--mantine-color-dark-6); cursor: pointer; }
+.gha-sticky { position: sticky; bottom: 0; z-index: 5; }
+@media (max-width: 48em) { .gha-sticky { bottom: 68px; } }

@@ -1,0 +1,19 @@
+{
+  "name": "@gha/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --no-warnings src/main.ts",
+    "start": "node --no-warnings src/main.ts",
+    "user": "node --no-warnings src/cli.ts",
+    "test": "node --no-warnings --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@fastify/static": "^8.2.0",
+    "fastify": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}
