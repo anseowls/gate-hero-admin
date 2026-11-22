@@ -31,3 +31,18 @@ export function ChangeList({ changes, max = 8 }: { changes: Change[]; max?: numb
     </Stack>
   );
 }
+
+/** 확인 창(브라우저 confirm 대신 — 미리보기 틀에서는 confirm이 막힘) */
+import { Modal, Button } from '@mantine/core';
+import { useState as useS } from 'react';
+export function useConfirm() {
+  const [st, setSt] = useS<{ title: string; body: string; ok: string; color?: string; run: () => void } | null>(null);
+  const ask = (title: string, body: string, run: () => void, ok = '확인', color?: string) => setSt({ title, body, ok, color, run });
+  const node = (
+    <Modal opened={!!st} onClose={() => setSt(null)} title={st?.title} centered>
+      <Text size="sm" mb="md">{st?.body}</Text>
+      <Group justify="flex-end"><Button variant="default" onClick={() => setSt(null)}>취소</Button><Button color={st?.color} onClick={() => { const r = st!.run; setSt(null); r(); }}>{st?.ok}</Button></Group>
+    </Modal>
+  );
+  return { ask, node };
+}

@@ -5,16 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { IconArrowBackUp } from '@tabler/icons-react';
 import { TABLES, canDo } from '@shared';
 import { useApi, useAuth } from '../ctx.tsx';
-import { PageHead, Loading, ChangeList } from '../components/Common.tsx';
+import { PageHead, Loading, ChangeList, useConfirm } from '../components/Common.tsx';
 import { fmtTime, ago, ok, fail } from '../util.ts';
 
 export function HistoryPage() {
   const api = useApi(), { me } = useAuth(), qc = useQueryClient(), nav = useNavigate();
   const [table, setTable] = useState<string | null>(null), [key, setKey] = useState(''), [limit, setLimit] = useState(50);
   const q = useQuery({ queryKey: ['history', table || '', key, limit], queryFn: () => api.history({ table: table || undefined, key: key || undefined, limit }) });
-  const revert = async (id: number) => { if (!confirm(`#${id} 변경을 되돌릴까요? (그 변경 이전 값으로 다시 저장 — 새 기록이 남아요)`)) return; try { await api.revert(id); ok('되돌렸어요 — 배포하면 게임에 적용돼요'); qc.invalidateQueries(); } catch (e) { fail(e); } };
+  const cf = useConfirm();
+  const revert = (id: number) => cf.ask('변경 되돌리기', `#${id} 변경 이전 값으로 다시 저장할까요? 새 기록이 남아요.`, async () => { try { await api.revert(id); ok('되돌렸어요 — 배포하면 게임에 적용돼요'); qc.invalidateQueries(); } catch (e) { fail(e); } }, '되돌리기', 'orange');
   return (
     <>
+      {cf.node}
       <PageHead title="변경 이력" sub="누가 언제 무엇을 왜 바꿨는지" />
       <Group mb="sm" gap="sm" wrap="wrap">
         <Select placeholder="모든 표" clearable data={TABLES.map(t => ({ value: t.name, label: t.label }))} value={table} onChange={setTable} w={180} />

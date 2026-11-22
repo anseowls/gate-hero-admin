@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { MantineProvider, createTheme, Center, Loader } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, MemoryRouter, Routes, Route, Navigate } from 'react-router-dom';
 import type { Me } from '@shared';
-import { tokenStore, type Api, ApiError } from './api/client.ts';
+import { tokenStore, type Api, ApiError, IS_DEMO } from './api/client.ts';
 import { ApiCtx, AuthCtx } from './ctx.tsx';
 import { Shell } from './components/Shell.tsx';
 import { LoginPage } from './pages/Login.tsx';
@@ -16,6 +16,8 @@ import { ReleasesPage } from './pages/Releases.tsx';
 import { HistoryPage } from './pages/History.tsx';
 import { AdminPage } from './pages/Admin.tsx';
 
+/** 데모(미리보기 틀)는 주소를 못 바꾸므로 메모리 라우터, 실서버는 #/경로 */
+const Router = IS_DEMO ? MemoryRouter : HashRouter;
 const theme = createTheme({ primaryColor: 'indigo', defaultRadius: 'md', fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif' });
 
 export function App({ api }: { api: Api }) {
@@ -41,7 +43,7 @@ export function App({ api }: { api: Api }) {
         <ApiCtx.Provider value={api}>
           <AuthCtx.Provider value={{ me, setMe, logout }}>
             {booting ? <Center h="100vh"><Loader /></Center> : !me ? <LoginPage /> : (
-              <HashRouter>
+              <Router>
                 <Shell>
                   <Routes>
                     <Route path="/" element={<DashboardPage />} />
@@ -54,7 +56,7 @@ export function App({ api }: { api: Api }) {
                     <Route path="*" element={<Navigate to="/" />} />
                   </Routes>
                 </Shell>
-              </HashRouter>
+              </Router>
             )}
           </AuthCtx.Provider>
         </ApiCtx.Provider>

@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IconDeviceFloppy, IconCopy, IconTrash, IconRefresh } from '@tabler/icons-react';
 import { canDo, diff, tableDef, type Json, type Issue } from '@shared';
 import { useApi, useAuth } from '../ctx.tsx';
-import { PageHead, Loading, ChangeList } from '../components/Common.tsx';
+import { PageHead, Loading, ChangeList, useConfirm } from '../components/Common.tsx';
 import { JsonForm, countChanged } from '../components/JsonForm.tsx';
 import { fmtTime, ok, fail, setIn, same, ago } from '../util.ts';
 import { ApiError } from '../api/client.ts';
@@ -26,6 +26,7 @@ export function EditorPage() {
   const [json, setJson] = useState(''), [jsonErr, setJsonErr] = useState('');
   const [issues, setIssues] = useState<Issue[] | null>(null), [busy, setBusy] = useState(false);
   const [dup, setDup] = useState<string | null>(null);
+  const cf = useConfirm();
 
   useEffect(() => { if (q.data) { setDraft(q.data.data); setJson(JSON.stringify(q.data.data, null, 2)); } }, [q.data]);
   const dirty = !!q.data && draft !== null && !same(draft, q.data.data);
@@ -49,7 +50,7 @@ export function EditorPage() {
   };
   const onPath = (p: (string | number)[], v: Json | undefined) => setDraft(d => { const n = setIn(d, p, v); setJson(JSON.stringify(n, null, 2)); return n; });
   const onJson = (s: string) => { setJson(s); try { setDraft(JSON.parse(s)); setJsonErr(''); } catch (e: any) { setJsonErr(e.message); } };
-  const remove = async () => { if (!confirm(`${table}.${key} 항목을 지울까요? (배포 전까지는 게임에 영향 없음)`)) return; try { await api.remove(table, key, note); ok('지웠어요'); refresh(); nav('/balance/' + table); } catch (e) { fail(e); } };
+  const remove = () => cf.ask('항목 삭제', `${table}.${key} 항목을 지울까요? 배포 전까지는 게임에 영향이 없어요.`, async () => { try { await api.remove(table, key, note); ok('지웠어요'); refresh(); nav('/balance/' + table); } catch (e) { fail(e); } }, '삭제', 'red');
 
   const d = tableDef(table), title = q.data && typeof (q.data.data as any)?.name === 'string' ? (q.data.data as any).name : key;
   return (
@@ -116,6 +117,7 @@ export function EditorPage() {
         </Group>
       </Modal>
 
+      {cf.node}
       <Modal opened={dup !== null} onClose={() => setDup(null)} title="복제해서 새 항목 만들기" centered>
         <Stack>
           <TextInput label="새 키" value={dup || ''} onChange={e => setDup(e.currentTarget.value)} description="영문·숫자·_.#:- 64자 이내" />
